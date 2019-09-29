@@ -1,0 +1,9 @@
+* Guile-Telegram
+  A library for Telegram bot API.
+
+* Dependencies
+  - CURL
+  - [[https://github.com/NalaGinrut/guile-json][Guile-JSON]]
+
+* License
+  GNU GPL v3 or later.
