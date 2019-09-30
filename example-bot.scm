@@ -3,7 +3,8 @@
 !#
 
 (use-modules (telegram)
-             (oop goops))
+             (oop goops)
+             (ice-9 pretty-print))
 
 
 ;; Entry point
@@ -18,13 +19,17 @@
                 #:name  (list-ref config 1)
                 #:proxy (list-ref config 2))))
     (while #t
-      (let ((u (get-updates bot)))
-        (let* ((message (hash-ref (car (response:result u)) "message"))
-               (chat-id (message:chat-id message))
-               (text    (message:text message)))
-          (display text)
-          (newline)
-          (send-message bot chat-id text)
-          (sleep 1))))))
+           (let* ((u       (get-updates bot))
+                  (result  (response:result u)))
+             (pretty-print result)
+             (newline)
+             (if (> (length result) 0)
+                 (let* ((message (hash-ref (car result) "message"))
+                        (chat-id (message:chat-id message))
+                        (text    (message:text message)))
+                   (display text)
+                   (newline)
+                   (send-message bot chat-id (string-append  "_" text "_")  #:parse-mode "Markdown")
+                   (sleep 1)))))))
 
 ;;; example-bot.scm ends here.

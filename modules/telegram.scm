@@ -59,10 +59,25 @@
   (let ((p (api-request self "getUpdates")))
     (json-string->scm (read-all p))))
 
-(define-method (send-message (self <telegram-bot>) (chat-id <number>) (message <string>))
+(define (%make-option name value)
+  (if value
+      (format #f "&~a=~a" name (if (boolean? value)
+                                   "true"
+                                   value))
+      ""))
+
+
+(define* (send-message self chat-id message
+                       #:key parse-mode disable-web-page-preview? disable-notification?
+                       reply-to-message-id reply-markup)
   (let ((p (api-request self
-                        (format #f "sendMessage?chat_id=~a&text=~a"
-                                chat-id message))))
+                        (string-append (format #f "sendMessage?chat_id=~a&text=~a"
+                                               chat-id message)
+                                       (%make-option "parse_mode" parse-mode)
+                                       (%make-option "disable_web_page_preview" disable-web-page-preview?)
+                                       (%make-option "disable_notification"     disable-notification?)
+                                       (%make-option "reply_to_message_id"      reply-to-message-id)
+                                       (%make-option "reply_markup"             reply-markup)))))
     (json-string->scm (read-all p))))
 
 
