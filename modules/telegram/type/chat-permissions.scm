@@ -4,7 +4,7 @@
             can-send-messages?         set-send-permission!
             can-send-media-messages?   set-send-media-permission!
             can-send-polls?            set-send-polls-permission!
-            can-send-other-messages?   set-send-other-permissions!
+            can-send-other-messages?   set-send-other-permission!
             can-add-web-page-previews? set-web-page-previews-permission!
             can-change-info?           set-change-info-permission!
             can-invite-users?          set-invite-users-permission!
@@ -30,7 +30,7 @@
   ;; <boolean>
   (can-send-other-messages?
    #:init-keyword #:can-send-other-messages?
-   #:getter can-send-other-messages? #:setter set-send-other-permissions!)
+   #:getter can-send-other-messages? #:setter set-send-other-permission!)
 
   ;; <boolean>
   (can-add-web-page-previews?
