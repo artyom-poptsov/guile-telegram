@@ -5,5 +5,12 @@
   - CURL
   - [[https://github.com/NalaGinrut/guile-json][Guile-JSON]]
 
+* Usage
+** `config.scm` file format for example bot
+A list of following strings:
+```
+(<token> <bot-name> <proxy>)
+```
+
 * License
   GNU GPL v3 or later.
