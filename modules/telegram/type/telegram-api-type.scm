@@ -1,5 +1,5 @@
-(define-module (telegram types telegram-api-type)
-  #:use-modules (oop goops)
+(define-module (telegram type telegram-api-type)
+  #:use-module (oop goops)
   #:export (<telegram-api-type>))
 
 (define-class <telegram-api-type> ()
