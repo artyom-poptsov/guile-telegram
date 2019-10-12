@@ -1,4 +1,4 @@
-(define-module (telegram types message)
+(define-module (telegram type message)
   #:use-modules (oop goops)
   #:use-modules (telegram types telegram-api-type)
   #:use-modules (telegram types chat-photo)

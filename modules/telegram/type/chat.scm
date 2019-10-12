@@ -1,4 +1,4 @@
-(define-module (telegram types chat)
+(define-module (telegram type chat)
   #:use-modules (oop goops)
   #:use-modules (telegram types chat-photo)
   #:use-modules (telegram types chat-permissions)

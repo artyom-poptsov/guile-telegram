@@ -1,4 +1,4 @@
-(define-module (telegram types chat-permissions)
+(define-module (telegram type chat-permissions)
   #:use-modules (oop goops)
   #:export (<chat-permissions>
             can-send-messages?         set-send-permission!
