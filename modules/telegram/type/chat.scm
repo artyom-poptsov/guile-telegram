@@ -1,6 +1,7 @@
 (define-module (telegram types chat)
   #:use-modules (oop goops)
   #:use-modules (telegram types chat-photo)
+  #:use-modules (telegram types chat-permissions)
   #:export (<chat>
             get-id               set-id!
             get-type             set-type!
