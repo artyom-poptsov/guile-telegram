@@ -2,7 +2,7 @@
 -L modules -e main -s
 !#
 
-(use-modules (telegram)
+(use-modules (telegram bot)
              (oop goops)
              (ice-9 pretty-print))
 
@@ -18,6 +18,7 @@
                 #:token (list-ref config 0)
                 #:name  (list-ref config 1)
                 #:proxy (list-ref config 2))))
+    (display (get-me bot))
     (while #t
            (let* ((u       (get-updates bot))
                   (result  (response:result u)))

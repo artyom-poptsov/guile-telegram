@@ -1,6 +1,7 @@
 ;;; Guile Telegram API
 
-(define-module (telegram)
+(define-module (telegram bot)
+  #:use-module (telegram type user)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 popen)
   #:use-module (oop goops)
@@ -49,11 +50,28 @@
         result
         (loop (read-line port) (string-append result line)))))
 
-;; API Methods.
+;;; API Methods.
 
-(define-method (get-me (self <telegram-bot>))
+;; Make a 'getMe' request to the API.
+;;
+;; This method returns the raw response in the form of a list of hash tables.
+(define-method (%get-me (self <telegram-bot>))
   (let ((p (api-request self "getMe")))
     (json-string->scm (read-all p))))
+
+;; Make a 'getMe' request to the API.
+(define-method (get-me (self <telegram-bot>))
+  (let ((response (%get-me self)))
+    (if (response:okay? response)
+        (let ((result (response:result response)))
+          (make <user>
+            #:id            (hash-ref result "id")
+            #:is-bot?       (hash-ref result "is_bot")
+            #:first-name    (hash-ref result "first_name")
+            #:last-name     (hash-ref result "last_name")
+            #:username      (hash-ref result "username")
+            #:language-code (hash-ref result "language_code")))
+        (error "Failed to make 'getMe' request"))))
 
 (define-method (get-updates (self <telegram-bot>))
   (let ((p (api-request self "getUpdates")))
