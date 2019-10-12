@@ -1,4 +1,5 @@
-(define-module (telegram types user)
+(define-module (telegram type user)
+  #:use-module (telegram type telegram-api-type)
   #:use-module (oop goops)
   #:export (<user>
             get-id set-id!
