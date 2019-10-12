@@ -6,11 +6,11 @@
   - [[https://github.com/NalaGinrut/guile-json][Guile-JSON]]
 
 * Usage
-** `config.scm` file format for example bot
+** 'config.scm' file format for example bot
 A list of following strings:
-```
+#+BEGIN_EXAMPLE scheme
 (<token> <bot-name> <proxy>)
-```
+#+END_EXAMPLE
 
 * License
   GNU GPL v3 or later.
