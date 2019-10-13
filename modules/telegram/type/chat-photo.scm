@@ -1,5 +1,6 @@
 (define-module (telegram type chat-photo)
-  #:use-modules (oop goops)
+  #:use-module (oop goops)
+  #:use-module (telegram type telegram-api-type)
   #:export (<chat-photo>
             get-small-file-id set-small-file-id!
             get-big-file-id set-big-file-id!))

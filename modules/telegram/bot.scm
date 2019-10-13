@@ -2,6 +2,7 @@
 
 (define-module (telegram bot)
   #:use-module (telegram type user)
+  #:use-module (telegram type update)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 popen)
   #:use-module (oop goops)
@@ -65,17 +66,32 @@
     (if (response:okay? response)
         (let ((result (response:result response)))
           (make <user>
+            #:raw-data      result)
             #:id            (hash-ref result "id")
             #:is-bot?       (hash-ref result "is_bot")
             #:first-name    (hash-ref result "first_name")
             #:last-name     (hash-ref result "last_name")
             #:username      (hash-ref result "username")
-            #:language-code (hash-ref result "language_code")))
+            #:language-code (hash-ref result "language_code"))
         (error "Failed to make 'getMe' request"))))
 
-(define-method (get-updates (self <telegram-bot>))
+(define-method (%get-updates (self <telegram-bot>))
   (let ((p (api-request self "getUpdates")))
     (json-string->scm (read-all p))))
+
+(define-method (get-updates (self <telegram-bot>))
+  (let ((response (%get-updates self)))
+    (if (response:okay? response)
+        (let ((result (response:result response)))
+          (if (not (null? result))
+              (map (lambda (update)
+                     (make <update>
+                       #:raw-data update
+                       #:update-id (hash-ref update "update_id")
+                       #:content   (hash-ref update "message"))) ; TODO: Handle other types
+                   result)
+              #f))
+        (error "Failed to make 'getUpdates' request"))))
 
 (define (%make-option name value)
   (if value

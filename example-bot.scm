@@ -3,6 +3,9 @@
 !#
 
 (use-modules (telegram bot)
+             (telegram type update)
+             (telegram type message)
+             (telegram type chat)
              (oop goops)
              (ice-9 pretty-print))
 
@@ -20,16 +23,17 @@
                 #:proxy (list-ref config 2))))
     (display (get-me bot))
     (while #t
-           (let* ((u       (get-updates bot))
-                  (result  (response:result u)))
-             (pretty-print result)
-             (newline)
-             (if (> (length result) 0)
-                 (let* ((message (hash-ref (car result) "message"))
-                        (chat-id (message:chat-id message))
-                        (text    (message:text message)))
+           (let* ((updates (get-updates bot)))
+             (if (> (length updates) 0)
+                 (let* ((message (raw-data->message (get-content (car updates))))
+                        (chat    (get-chat message))
+                        (chat-id (get-id chat))
+                        (text    (get-text message)))
+                   (display chat-id)
+                   (newline)
                    (display text)
                    (newline)
+
                    (send-message bot chat-id (string-append  "_" text "_")  #:parse-mode "Markdown")
                    (sleep 1)))))))
 
