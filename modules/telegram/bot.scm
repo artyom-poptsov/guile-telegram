@@ -65,14 +65,7 @@
   (let ((response (%get-me self)))
     (if (response:okay? response)
         (let ((result (response:result response)))
-          (make <user>
-            #:raw-data      result)
-            #:id            (hash-ref result "id")
-            #:is-bot?       (hash-ref result "is_bot")
-            #:first-name    (hash-ref result "first_name")
-            #:last-name     (hash-ref result "last_name")
-            #:username      (hash-ref result "username")
-            #:language-code (hash-ref result "language_code"))
+          (raw-data->user result))
         (error "Failed to make 'getMe' request"))))
 
 (define-method (%get-updates (self <telegram-bot>))

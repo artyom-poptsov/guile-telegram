@@ -3,13 +3,15 @@
   #:use-module (telegram type telegram-api-type)
   #:use-module (telegram type chat-photo)
   #:use-module (telegram type chat)
+  #:use-module (telegram type user)
   #:export (<message>
             raw-data->message
-            get-message-id set-message-id!
+            get-id set-id!
             get-from set-from!
             get-date set-date!
             get-chat set-chat!
-            get-text set-text!))
+            get-text set-text!)
+  #:duplicates (merge-generics))
 
 
 ;; See:
@@ -58,8 +60,8 @@
 ;; Convert a raw data from Telegram API to an <message> object.
 (define-method (raw-data->message (data <hashtable>))
   (make <message>
-    #:message-id (%message:id data)
-    #:from       (%message:from data)
+    #:id         (%message:id data)
+    #:from       (raw-data->user (%message:from data))
     #:date       (%message:date data)
     #:chat       (raw-data->chat (%message:chat data))
     #:text       (%message:text data)))

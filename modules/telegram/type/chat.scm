@@ -17,7 +17,9 @@
             get-pinned-message   set-pinned-message!
             get-permissions      set-permissions!
             get-sticker-set-name set-sticker-set-name!
-            can-set-sticker-set? set-can-set-sticker-set!))
+            can-set-sticker-set? set-can-set-sticker-set!)
+  #:duplicates (merge-generics))
+
 
 
 ;; See:
