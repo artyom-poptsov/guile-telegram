@@ -1,7 +1,7 @@
 (define-module (telegram type message)
-  #:use-modules (oop goops)
-  #:use-modules (telegram types telegram-api-type)
-  #:use-modules (telegram types chat-photo)
+  #:use-module (oop goops)
+  #:use-module (telegram types telegram-api-type)
+  #:use-module (telegram types chat-photo)
   #:export (<message>))
 
 (define-class <message> (<telegram-api-type>)
