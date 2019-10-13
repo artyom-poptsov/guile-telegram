@@ -1,5 +1,6 @@
 (define-module (telegram type update)
   #:use-module (oop goops)
+  #:use-module (telegram type telegram-api-type)
   #:use-module (telegram type message)
   #:export     (<update>
                 get-update-id set-update-id!
