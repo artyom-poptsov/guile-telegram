@@ -3,6 +3,7 @@
 (define-module (telegram bot)
   #:use-module (telegram type user)
   #:use-module (telegram type update)
+  #:use-module (telegram type message)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 popen)
   #:use-module (oop goops)
@@ -24,6 +25,12 @@
 (define %curl-opt         "--silent")
 ;; (define %curl-opt         "-v")
 
+;; 'getUpdates' method parameters
+(define %get-updates-offset-param          "offset")
+(define %get-updates-limit-param           "limit")
+(define %get-updates-timeout-param         "timeout")
+(define %get-updates-allowed-updates-param "allowed_updates")
+
 
 ;; The main class
 (define-class <telegram-bot> ()
@@ -33,14 +40,32 @@
 
 
 ;; Send a message MESSAGE to the bot API.
-(define-method (api-request (self <telegram-bot>) (message <string>))
-  (open-input-pipe
-   (string-append (format #f "curl -X GET ~a --proxy ~a '~a/bot~a/~a'"
+(define-method (api-request (self <telegram-bot>) (method <string>)
+                            (parameters <hashtable>))
+  (let* ((parstring (if (zero? (hash-count (const #t) parameters))
+                        ""
+                        (string-append
+                         "?"
+                         (string-join (hash-fold (lambda (key value prior-result)
+                                                  (cons
+                                                   (format #f "~a=~a" key value)
+                                                   prior-result))
+                                                '()
+                                                parameters)
+                                     "&"))))
+         (command (format #f "curl -X GET ~a --proxy ~a '~a/bot~a/~a~a'"
                           %curl-opt
                           (get-proxy self)
                           %telegram-api-url
                           (get-token self)
-                          message))))
+                          method
+                          parstring)))
+    (display command)
+    (newline)
+    (open-input-pipe command)))
+
+(define-method (api-request (self <telegram-bot>) (method <string>))
+  (api-request self method (make-hash-table)))
 
 
 ;;; Helper procedures
@@ -68,23 +93,34 @@
           (raw-data->user result))
         (error "Failed to make 'getMe' request"))))
 
-(define-method (%get-updates (self <telegram-bot>))
-  (let ((p (api-request self "getUpdates")))
+(define-method (%get-updates (self <telegram-bot>) (parameters <hashtable>))
+  (let ((p (api-request self "getUpdates" parameters)))
     (json-string->scm (read-all p))))
 
-(define-method (get-updates (self <telegram-bot>))
-  (let ((response (%get-updates self)))
-    (if (response:okay? response)
-        (let ((result (response:result response)))
-          (if (not (null? result))
-              (map (lambda (update)
-                     (make <update>
-                       #:raw-data update
-                       #:update-id (hash-ref update "update_id")
-                       #:content   (hash-ref update "message"))) ; TODO: Handle other types
-                   result)
-              #f))
-        (error "Failed to make 'getUpdates' request"))))
+(define* (get-updates self #:key offset limit timeout allowed-updates)
+  (let ((parameters (make-hash-table)))
+    (when offset
+      (hash-set! parameters %get-updates-offset-param offset))
+    (when limit
+      (hash-set! parameters %get-updates-limit-param limit))
+    (when timeout
+      (hash-set! parameters %get-updates-timeout-param timeout))
+    (when allowed-updates
+      (hash-set! parameters %get-updates-allowed-updates-param allowed-updates))
+    (let ((response (%get-updates self parameters)))
+      (if (response:okay? response)
+          (let ((result (response:result response)))
+            (if (not (null? result))
+                (map (lambda (update)
+                       (display (hash-ref (hash-ref update "message") "message_id"))
+                       (newline)
+                       (make <update>
+                         #:raw-data  update
+                         #:id        (hash-ref update "update_id")
+                         #:content   (raw-data->message (hash-ref update "message")))) ; TODO: Handle other types
+                     result)
+                #f))
+          (error "Failed to make 'getUpdates' request")))))
 
 (define (%make-option name value)
   (if value

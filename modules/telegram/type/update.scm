@@ -3,18 +3,19 @@
   #:use-module (telegram type telegram-api-type)
   #:use-module (telegram type message)
   #:export     (<update>
-                get-update-id set-update-id!
+                get-id set-id!
                 get-content set-content!
                 <update/message>
-                <update/edited-message>))
+                <update/edited-message>)
+  #:duplicates (merge-generics))
 
 
 ;; This object represents an incoming update.
 (define-class <update> (<telegram-api-type>)
   ;; <number>
-  (update-id
-   #:init-keyword #:update-id
-   #:getter get-update-id #:setter set-update-id!)
+  (id
+   #:init-keyword #:id
+   #:getter get-id #:setter set-id!)
   ;; One of: <message>, <inline-query>, <chosen-inline-result>,
   ;;         <callback-query>, <shipping-query>, <pre-checkout-query>,
   ;;         <poll>
