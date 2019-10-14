@@ -29,7 +29,7 @@ exec guile -L . -L modules -e "(@ (example-bot) main)" -s "$0" "$@"
          (me (get-me bot)))
     (while #t
            (let* ((updates (get-updates bot)))
-             (if (> (length updates) 0)
+             (if (and updates (> (length updates) 0))
                  (let* ((message (raw-data->message (get-content (car updates))))
                         (chat    (get-chat message))
                         (chat-id (get-id chat))
