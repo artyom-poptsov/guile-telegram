@@ -65,7 +65,8 @@ AC_SUBST([guilesitedir])
 GUILE_EFFECTIVE_VERSION=`$GUILE -c '(display (effective-version))'`
 AC_SUBST(GUILE_EFFECTIVE_VERSION)
 
-AC_CONFIG_FILES([Makefile am/Makefile])
+AC_CONFIG_FILES([Makefile am/Makefile build-aux/Makefile m4/Makefile])
+AC_CONFIG_FILES([modules/Makefile modules/telegram/Makefile modules/telegram/type/Makefile])
 
 # Generate a Makefile, based on the results.
 AC_OUTPUT
