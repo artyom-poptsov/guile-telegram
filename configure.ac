@@ -3,7 +3,7 @@ dnl   Process this file with autoconf to produce configure.
 dnl
 
 define(GUILE_TELEGRAM_CONFIGURE_COPYRIGHT, [[
-Copyright (C) 2019 Artyom V. Poptsov <poptsov.artyom@gmail.com>
+Copyright (C) 2019-2022 Artyom V. Poptsov <poptsov.artyom@gmail.com>
 
 This file is part of Guile-Telegram.
 
@@ -49,10 +49,9 @@ m4_pattern_forbid([^GUILE_PROGS$])
 
 dnl Use this macro so that 'GUILE_EFFECTIVE_VERSION' is defined here.
 dnl Try Guile 2.2, then Guile 2.0.
-GUILE_PKG([2.2 2.0])
+GUILE_PKG([3.0 2.2 2.0])
 
 GUILE_PROGS
-GUILE_FLAGS
 GUILE_SITE_DIR
 
 GUILE_MODULE_REQUIRED([json])
