@@ -1,2 +1,3 @@
 EXTRA_DIST = \
-	guile.m4
+	guile-2.0.m4	\
+	pkg.m4
