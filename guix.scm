@@ -70,7 +70,7 @@
            guile-lib
            guile-json-4
            curl))
-    (home-page "https://github.com/artyom-poptsov/guile-ini")
+    (home-page "https://github.com/artyom-poptsov/guile-telegram")
     (synopsis "Guile library Telegram bot API")
     (description
      "@code{guile-telegram} is a GNU Guile library that allows to use Telegram bot
